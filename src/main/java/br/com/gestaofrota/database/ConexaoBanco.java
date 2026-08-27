@@ -1,6 +1,7 @@
 package br.com.gestaofrota.database;
 
 import br.com.gestaofrota.excecoes.DadosVeiculoInvalidosException;
+import br.com.gestaofrota.model.Caminhao;
 import br.com.gestaofrota.model.Carro;
 import br.com.gestaofrota.model.Moto;
 import br.com.gestaofrota.model.Veiculo;
@@ -38,9 +39,30 @@ public class ConexaoBanco {
         }
     }
 
-    public static void salvarVeiculo(Veiculo veiculo) throws SQLException, DadosVeiculoInvalidosException {
+    public static void salvarVeiculo(Veiculo veiculo)
+            throws SQLException, DadosVeiculoInvalidosException {
         if (veiculo.getAno() < 1900 || veiculo.getAno() > 2027) {
             throw new DadosVeiculoInvalidosException("Ano do veículo é inválido: " + veiculo.getAno());
+        }
+
+        if (veiculo.getMarca().isBlank() || veiculo.getMarca().isEmpty()) {
+            throw new DadosVeiculoInvalidosException("A marca deve ser informada!");
+        }
+
+        if (veiculo.getModelo().isBlank() || veiculo.getModelo().isEmpty()) {
+            throw new DadosVeiculoInvalidosException("A modelo deve ser informado!");
+        }
+
+        if (veiculo instanceof Carro c){
+            if (c.getQuantidadePortas() < 2 || c.getQuantidadePortas() > 6) {
+                throw new DadosVeiculoInvalidosException("Quantidade de portas deve ser de 2 a 6!");
+            }
+        }
+
+        if (veiculo instanceof Moto m){
+            if (m.getCilindradas() < 50 || m.getCilindradas() > 2500) {
+                throw new DadosVeiculoInvalidosException("Quantidade de cilindradas deve ser entre 50 e 2500!");
+            }
         }
 
         String sql = "INSERT INTO veiculos(tipo, marca, modelo, ano, detalhe_especifico) VALUES(?, ?, ?, ?, ?)";
@@ -57,6 +79,8 @@ public class ConexaoBanco {
                 stmt.setInt(5, c.getQuantidadePortas());
             } else if (veiculo instanceof Moto m) {
                 stmt.setInt(5, m.getCilindradas());
+            } else if (veiculo instanceof Caminhao c) {
+                stmt.setDouble(5, c.getCapacidadeCargaToneladas());
             }
 
             stmt.executeUpdate();
@@ -83,6 +107,8 @@ public class ConexaoBanco {
                     frota.add(new Carro(id, marca, modelo, ano, detalhe));
                 } else if ("MOTO".equalsIgnoreCase(tipo)) {
                     frota.add(new Moto(id, marca, modelo, ano, detalhe));
+                } else if ("CAMINHAO".equalsIgnoreCase(tipo)) {
+                    frota.add(new Caminhao(id, marca, modelo, ano, detalhe));
                 }
             }
         }
