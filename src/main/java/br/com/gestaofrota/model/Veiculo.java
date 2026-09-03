@@ -28,7 +28,8 @@ public class Veiculo {
     // 3 - Método polimórfico
     public String exibirFichaTecnica() {
         return String.format("[%s] %s %s - Ano: %d",
-                getClass().getSimpleName().toUpperCase(), marca, modelo, ano);
+                getClass().getSimpleName().toUpperCase(),
+                marca, modelo, ano);
     }
 
     // 4 - Getters

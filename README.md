@@ -85,14 +85,14 @@ mvn clean compile
 ### 1. Executar a aplicação
 
 ```bash
-mvn exec:java -Dexec.mainClass="br.com.gestaofrota.Main"
+mvn exec:java -Dexec.mainClass="br.com.gestaofrota.MainOriginal"
 ```
 
 Ou gere o JAR e execute diretamente:
 
 ```bash
 mvn clean package
-java -cp target/app_gestao_frotas-1.0-SNAPSHOT.jar br.com.gestaofrota.Main
+java -cp target/app_gestao_frotas-1.0-SNAPSHOT.jar br.com.gestaofrota.MainOriginal
 ```
 
 ### 2. Exemplo de saída
